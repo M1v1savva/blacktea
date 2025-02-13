@@ -1,4 +1,3 @@
-
 # Hello, World!... in BlackTea
 
 Package that prints "Hello, world!".
