@@ -11,9 +11,12 @@ namespace package_manager {
 
 const std::string kRepoUrl = "https://github.com/M1v1savva/blacktea_package_manager";
 const std::string kPackageListUrl = kRepoUrl + "/archive/refs/tags/package_list_v0.1.0.tar.gz";
+
+const std::string kSelfName = "package_manager_v0.1.0";
+const std::string kSelfShortName = "package_manager";
+
 const std::string kPackageDir = "packages";
-const std::string kSelfPackageName = 'package_manager_v0.1.0';
-const std::string kPackageListPath = kPackageDir + "/repo_list.json"
+const std::string kPackageListPath = kPackageDir + "/package_list.json"
 const std::string kEnvListPath = kPackageDir + "/env_list.json";
 
 size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
@@ -33,7 +36,7 @@ bool fetch_package_list() {
         return false;
     }
 
-    std::ofstream out_file(kRepoListPath);
+    std::ofstream out_file(kPackageListPath);
     if (!out_file.is_open()) {
         LOG(ERROR) << "Failed to create package list file.";
         return false;
@@ -56,9 +59,9 @@ bool fetch_package_list() {
 }
 
 bool download_package(const std::string& package_name) {
-	std::ifstream metadata_file(kRepoListPath);
+	std::ifstream metadata_file(kPackageListPath);
     if (!metadata_file) {
-        LOG(ERROR) << "Package list not found at " << kRepoListPath;
+        LOG(ERROR) << "Package list not found at " << kPackageListPath;
         return false;
     }
 
