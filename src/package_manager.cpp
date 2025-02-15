@@ -11,11 +11,10 @@ namespace package_manager {
 
 const std::string kRepoUrl = "https://github.com/M1v1savva/blacktea_package_manager";
 const std::string kPackageListUrl = kRepoUrl + "/archive/refs/tags/package_list_v0.1.0.tar.gz";
-const std::string kSha256Url = kRepoUrl + "/archive/refs/tags/sha256_v0.1.0.tar.gz";
-const std::string kPackageDir = "../";
+const std::string kPackageDir = "packages";
 const std::string kSelfPackageName = 'package_manager_v0.1.0';
-const std::string kRepoListPath = "./../repo_list.json"
-const std::string kEnvListPath = "./../env_list.json";
+const std::string kRepoListPath = kPackageDir + "/repo_list.json"
+const std::string kEnvListPath = kPackageDir + "/env_list.json";
 
 size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
     std::ofstream* out = static_cast<std::ofstream*>(userp);
@@ -23,18 +22,20 @@ size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
     return size * nmemb;
 }
 
-// TODO: write tests
-
 bool fetch_package_metadata() {
+    if (!std::filesystem::exists(kPackageDir)) {
+        std::filesystem::create_directories(kPackageDir);
+    }
+    
     CURL* curl = curl_easy_init();
     if (!curl) {
-        LOG(ERROR) << "Failed to initialize curl";
+        LOG(ERROR) << "Failed to initialize curl.";
         return false;
     }
 
     std::ofstream out_file(kRepoListPath);
-    if (!out_file) {
-        LOG(ERROR) << "Failed to create package list file";
+    if (!out_file.is_open()) {
+        LOG(ERROR) << "Failed to create package metadata file.";
         return false;
     }
 
@@ -57,12 +58,22 @@ bool fetch_package_metadata() {
 bool download_package(const std::string& package_name) {
 	std::ifstream metadata_file(kRepoListPath);
     if (!metadata_file) {
-        LOG(ERROR) << "Metadata not found for " << package_name;
+        LOG(ERROR) << "Package list not found in " << kRepoListPath;
         return false;
     }
 
 	nlohmann::json metadata;
-    metadata_file >> metadata;
+    try {
+        metadata_file >> metadata;
+    } catch (const std::exception& e) {
+        LOG(ERROR) << "Failed to parse metadata JSON: " << e.what();
+        return false;
+    }
+
+    if (!metadata.contains(package_name)) {
+        LOG(ERROR) << "Package name not found in metadata JSON: " << package_name;
+        return false;
+    }
 
     std::string package_url = metadata["url"];
     std::string package_path = kPackageDir + package_name + ".tar.gz";
@@ -92,7 +103,6 @@ bool download_package(const std::string& package_name) {
     }
 
     LOG(INFO) << "Download complete: " << package_path;
-    //TODO: verify download hash
     
     return true;
 }

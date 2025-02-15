@@ -2,13 +2,14 @@
 #define PACKAGE_MANAGER_H
 
 #include <string>
+#include <nlohmann/json.hpp>
 
 namespace package_manager {
 
 /// Fetches metadata (name, version, download URL) of the core packages. 
 /// Metadata is downloaded in an archived json from a github release.
-/// @return Fetched metadata as a json.
-void* fetch_package_metadata();
+/// @return True on success, false on failure.
+bool fetch_package_metadata();
 
 /// Downloads the specified package by name.
 /// Removes all archives starting with {package_name}.
@@ -29,14 +30,7 @@ bool install_package(const std::string& package_name);
 /// @return True on success, false on failure.
 bool self_update();
 
-/// Downloads the package hash by name. Hashes for archives and binaries.
-/// Downloads the package from [URL] that we get with the metadata fetch.
-/// @param package_name Name of the package.
-/// @return Fetched hash of the archives and binaries.
-void* fetch_package_hash(const std::string& package_name);
-
 /// Runs package in a new process.
-/// Fetches and compares the hashes first to ensure integrity of the binaries.
 /// @param package_name Name of the package.
 /// @return True on success, false on failure.
 bool run_package(const std::string& package_name);
