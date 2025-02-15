@@ -6,14 +6,13 @@
 class PackageManagerTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        // Ensure clean test state
         std::filesystem::remove_all("packages");
     }
 };
 
 TEST_F(PackageManagerTest, FetchPackageMetadata_Success) {
     EXPECT_TRUE(package_manager::fetch_package_metadata());
-    EXPECT_TRUE(std::filesystem::exists("packages/repo_list.json"));
+    EXPECT_TRUE(std::filesystem::exists("packages/package_list.json"));
 }
 
 TEST_F(PackageManagerTest, InstallPackage_Failure_NoMetadata) {

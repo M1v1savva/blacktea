@@ -25,6 +25,13 @@ size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
     return size * nmemb;
 }
 
+// TODO: test package fetch, download
+// TODO: rewrite install, sha256 part
+// TODO: self-update, run, delete
+// TODO: write tests and CMakeLists
+// TODO: write scripts
+// TODO: go through hello_world package once more
+
 bool fetch_package_list() {
     if (!std::filesystem::exists(kPackageDir)) {
         std::filesystem::create_directories(kPackageDir);
@@ -114,11 +121,11 @@ bool download_package(const std::string& package_name) {
     LOG(INFO) << "Download complete: " << package_path;
     return true;
 }
-
+/*
 std::string fetch_package_hash(const std::string& package_name) {
-    std::ifstream metadata_file(kRepoListPath);
+    std::ifstream metadata_file(kPackageListPath);
     if (!metadata_file) {
-        LOG(ERROR) << "Metadata file not found: " << kRepoListPath;
+        LOG(ERROR) << "Package list not found at: " << kPackageListPath;
         return "";
     }
     
@@ -126,7 +133,7 @@ std::string fetch_package_hash(const std::string& package_name) {
     try {
         metadata_file >> metadata;
     } catch (const std::exception& e) {
-        LOG(ERROR) << "Failed to parse package metadata: " << e.what();
+        LOG(ERROR) << "Failed to parse package list JSON: " << e.what();
         return "";
     }
     
@@ -225,6 +232,6 @@ bool verify_package_hash(const std::string& package_path, const std::string& exp
     }
 
     return (hash_stream.str() == expected_hash);
-}
+}*/
 
 } // namespace package_manager
