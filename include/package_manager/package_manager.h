@@ -9,7 +9,7 @@ namespace package_manager {
 /// Fetches metadata (name, version, download URL) of the core packages. 
 /// Metadata is downloaded in an archived json from a github release.
 /// @return True on success, false on failure.
-bool fetch_package_metadata();
+bool fetch_package_list();
 
 /// Downloads the specified package by name.
 /// Removes all archives starting with {package_name}.
