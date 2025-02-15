@@ -2,7 +2,6 @@
 #define PACKAGE_MANAGER_H
 
 #include <string>
-#include <nlohmann/json.hpp>
 
 namespace package_manager {
 
