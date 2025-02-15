@@ -35,7 +35,7 @@ bool fetch_package_list() {
 
     std::ofstream out_file(kRepoListPath);
     if (!out_file.is_open()) {
-        LOG(ERROR) << "Failed to create package metadata file.";
+        LOG(ERROR) << "Failed to create package list file.";
         return false;
     }
 
@@ -58,7 +58,7 @@ bool fetch_package_list() {
 bool download_package(const std::string& package_name) {
 	std::ifstream metadata_file(kRepoListPath);
     if (!metadata_file) {
-        LOG(ERROR) << "Package list not found in " << kRepoListPath;
+        LOG(ERROR) << "Package list not found at " << kRepoListPath;
         return false;
     }
 
@@ -66,17 +66,22 @@ bool download_package(const std::string& package_name) {
     try {
         metadata_file >> metadata;
     } catch (const std::exception& e) {
-        LOG(ERROR) << "Failed to parse metadata JSON: " << e.what();
+        LOG(ERROR) << "Failed to parse JSON package list: " << e.what();
         return false;
     }
 
     if (!metadata.contains(package_name)) {
-        LOG(ERROR) << "Package name not found in metadata JSON: " << package_name;
+        LOG(ERROR) << "Package name not found in package list: " << package_name;
         return false;
     }
 
-    std::string package_url = metadata["url"];
-    std::string package_path = kPackageDir + package_name + ".tar.gz";
+    if (!metadata[package_name].contains("url") || metadata[package_name]["url"].is_null()) {
+        LOG(ERROR) << "No valid URL found for package: " << package_name;
+        return false;
+    }
+
+    std::string package_url = metadata[package_name]["url"];
+    std::string package_path = kPackageDir + "/" + package_name + ".tar.gz";
 
 	CURL* curl = curl_easy_init();
     if (!curl) {
@@ -85,8 +90,9 @@ bool download_package(const std::string& package_name) {
     }
 
 	std::ofstream out_file(package_path, std::ios::binary);
-    if (!out_file) {
-        LOG(ERROR) << "Failed to create package file";
+    if (!out_file.is_open()) {
+        LOG(ERROR) << "Failed to create package file at: " << package_path;
+        curl_easy_cleanup(curl);
         return false;
     }
 
@@ -103,7 +109,6 @@ bool download_package(const std::string& package_name) {
     }
 
     LOG(INFO) << "Download complete: " << package_path;
-    
     return true;
 }
 
