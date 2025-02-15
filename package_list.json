@@ -1,0 +1,19 @@
+{
+	"packages": {
+	  "hello_package": {
+		"name": "hello_package",
+		"version": "v0.1",
+		"description": "A simple package that prints Hello, World!",
+		"url": "https://github.com/M1v1savva/blacktea/archive/refs/tags/hello_package_v0.1.tar.gz",
+		"sha256_url": "https://github.com/M1v1savva/blacktea/releases/download/hello_package_v0.1/hello_package_v0.1.sha256"
+	  },
+	  "blacktea_package_manager": {
+		"name": "blacktea_package_manager",
+		"version": "v0.1",
+		"description": "Package manager.",
+		"url": "https://github.com/M1v1savva/blacktea/archive/refs/tags/package_manager_v0.1.tar.gz",
+		"sha256_url": "https://github.com/M1v1savva/blacktea/releases/download/package_manager_v0.1/package_manager_v0.1.sha256"
+	  }
+	}
+}
+  
