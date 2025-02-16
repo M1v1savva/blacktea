@@ -37,7 +37,7 @@ bool run_package(const std::string& package_name);
 /// @param package_name Name of the package.
 /// @param keep_archives Keep archives if true, remove otherwise.
 /// @return True on success, false on failure.
-bool delete_package(const std::string& package_name, const bool keep_archives=True);
+bool delete_package(const std::string& package_name, bool keep_archives=true);
 
 } // namespace package_manager
 

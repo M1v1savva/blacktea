@@ -1,4 +1,4 @@
-#include "package_manager.h"
+#include "package_manager/package_manager.h"
 #include <iostream>
 #include <fstream>
 #include <filesystem>
@@ -9,14 +9,13 @@
 
 namespace package_manager {
 
-const std::string kRepoUrl = "https://github.com/M1v1savva/blacktea_package_manager";
-const std::string kPackageListUrl = kRepoUrl + "/archive/refs/tags/package_list_v0.1.0.tar.gz";
-
-const std::string kSelfName = "package_manager_v0.1.0";
-const std::string kSelfShortName = "package_manager";
+const std::string kRepoUrl = "https://github.com/M1v1savva/blacktea";
+const std::string kPackageListUrl = kRepoUrl + "/releases/download/package_list_v0.1/package_list.json";
+const std::string kSelfName = "blacktea_package_manager_v0.1";
+const std::string kSelfShortName = "blacktea_package_manager";
 
 const std::string kPackageDir = "packages";
-const std::string kPackageListPath = kPackageDir + "/package_list.json"
+const std::string kPackageListPath = kPackageDir + "/package_list.json";
 const std::string kEnvListPath = kPackageDir + "/env_list.json";
 
 size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
