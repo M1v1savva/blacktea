@@ -1,54 +1,26 @@
 #include "package_manager/utils.h"
 
-#include <iostream>
-#include <fstream>
-#include <filesystem>
-#include <curl/curl.h>
-#include <glog/logging.h>
 #include <nlohmann/json.hpp>
-#include <cstdlib>
 
 namespace utils {
 
-bool CurledData::is_ok() {
-	if (this-> curl_response_code != CURLE_OK) {
-        LOG(ERROR) << "Failed to fetch package list: " << curl_easy_strerror(res);
-        return false;
+void Config::load_config(const std::string& config_file) {
+    std::ifstream file(config_file);
+    if (!file.is_open()) {
+        LOG(ERROR) << "Failed to open config file: " << config_file;
+        throw std::runtime_error("Failed to open config file: " + config_file);
     }
 
-    if (this-> https_response_code != 200) {
-        LOG(ERROR) << "Server returned HTTPS code: " << response_code;
-        return false;
-    }
+    json j;
+    file >> j;
 
-    if (this-> data.empty()) {
-        LOG(ERROR) << "Package list response is empty.";
-        return false;
-    }
-	return true;
-}
-
-CurledData* fetch_data() {
-	CURL* curl = curl_easy_init();
-    if (!curl) {
-        LOG(ERROR) << "Failed to initialize curl.";
-        return false;
-    }
-
-    std::string response_data;
-    curl_easy_setopt(curl, CURLOPT_URL, kPackageListUrl.c_str());
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_data);
-    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-
-    CURLcode curl_response_code = curl_easy_perform(curl);
-
-    long https_response_code;
-    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &https_response_code);
-    curl_easy_cleanup(curl);
-
-	CurledData* response = new CurledData(response_data, curl_response_code, https_response_code); 
-	return response;
+    this-> repo_url = j["repo_url"];
+    this-> package_list_url = j["package_list_url"];
+    this-> self_name = j["self_name"];
+    this-> self_full_name = j["self_full_name"];
+    this-> package_dir = j["package_dir"];
+    this-> package_list_path = j["package_list_path"];
+    this-> env_list_path = j["env_list_path"];
 }
 
 }

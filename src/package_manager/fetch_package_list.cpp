@@ -5,7 +5,9 @@ namespace package_manager {
 
 bool fetch_package_list() {
 	// TODO: exception if directory cannot be created	
-	utils::create_package_dir();
+	if (!std::filesystem::exists(kPackageDir)) {
+		std::filesystem::create_directories(kPackageDir);
+	}
 	
 	std::ofstream out_file(kPackageListPath);
     if (!out_file) {
@@ -13,14 +15,8 @@ bool fetch_package_list() {
         return false;
     }
 
-	utils::CurledData* response = utils::fetch_data(kPackageListUrl);
-
-	if (!response-> is_ok())
-		return false;
-
-    out_file << (repsonse-> data);
-    out_file.close();
-
+    if (!utils::download(kPackageListUrl, out_file))
+        return false;
     LOG(INFO) << "Package list updated successfully.";
     return true;
 }

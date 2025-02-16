@@ -1,10 +1,8 @@
 #include "package_manager/package_manager.h"
 #include "package_manager/utils.h"
 
-namespace package_manager {
-
-bool download_package(const std::string& package_name) {
-	std::ifstream metadata_file(kPackageListPath);
+bool get_package_url(const std::string& package_name, std::string& package_url) {
+    std::ifstream metadata_file(kPackageListPath);
     if (!metadata_file) {
         LOG(ERROR) << "Package list not found at " << kPackageListPath;
         return false;
@@ -28,32 +26,24 @@ bool download_package(const std::string& package_name) {
         return false;
     }
 
-    std::string package_url = metadata["packages"][package_name]["url"];
+    package_url = metadata["packages"][package_name]["url"];
+    return true;
+}
+
+bool package_manager::download_package(const std::string& package_name) {
+	std::string package_url = "";
+    get_package_url(package_name, package_url);
+    
     std::string package_path = kPackageDir + "/" + package_name + ".tar.gz";
 
-	CURL* curl = curl_easy_init();
-    if (!curl) {
-        LOG(ERROR) << "Failed to initialize curl";
-        return false;
-    }
-
-	std::ofstream out_file(package_path, std::ios::binary);
+    std::ofstream out_file(package_path, std::ios::binary);
     if (!out_file.is_open()) {
         LOG(ERROR) << "Failed to create package file at: " << package_path;
         curl_easy_cleanup(curl);
         return false;
     }
 
-	curl_easy_setopt(curl, CURLOPT_URL, package_url.c_str());
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out_file);
-    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-    CURLcode res = curl_easy_perform(curl);
-    curl_easy_cleanup(curl);
-    out_file.close();
-
-	if (res != CURLE_OK) {
-        LOG(ERROR) << "Download failed: " << curl_easy_strerror(res);
+    if (!utils::download(url, out_file)) {
         return false;
     }
 

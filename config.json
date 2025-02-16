@@ -1,0 +1,9 @@
+{
+    "repo_url": "https://github.com/M1v1savva/blacktea",
+    "package_list_url": "https://github.com/M1v1savva/blacktea/releases/download/package_list_v0.1/package_list.json",
+    "self_full_name": "blacktea_package_manager_v0.1",
+    "self_name": "blacktea_package_manager",
+    "package_dir": "../../packages",
+    "package_list_path": "../../packages/package_list.json",
+    "env_list_path": "../../packages/env_list.json"
+}

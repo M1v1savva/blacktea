@@ -10,35 +10,27 @@ namespace package_manager {
 /// @return True on success, false on failure.
 bool fetch_package_list();
 
-/// Downloads the specified package by name.
-/// Get the download url in the package list.
-/// @param package_short_name Name of the package.
-/// @return True on success, false on failure.
-bool download_package(const std::string& package_short_name);
-
 /// Installs the specified package.
 /// Before installation, fetch sha256 hash and verify the archive.
-/// After that, run scripts/uninstall.sh and, subsequently, scripts/install.sh in the new manager. 
-/// @param package_short_name Name of the package.
+/// @param package_name Name of the package.
 /// @return True on success, false on failure.
-bool install_package(const std::string& package_short_name);
+bool install_package(const std::string& package_name);
 
 /// Performs a self-update of the package manager. 
-/// Closes the package manager and runs reinstall script in the new package that overwrites the old manager.
+/// After that, run scripts/uninstall.sh and, subsequently, scripts/install.sh in the new manager. 
 /// @return True on success, false on failure.
 bool self_update();
 
 /// Runs package in a new process.
-/// @param package_short_name Name of the package.
+/// @param package_name Name of the package.
 /// @return True on success, false on failure.
-bool run_package(const std::string& package_short_name);
+bool run_package(const std::string& package_name);
 
-/// Deletes all instances of the package and archives - depending on keep_archives flag.
-/// @param package_short_name Name of the package.
-/// @param keep_archives Keep archives if true, remove otherwise.
+/// Deletes all instances of the package.
+/// @param package_name Name of the package.
 /// @return True on success, false on failure.
-bool delete_package(const std::string& package_short_name, bool keep_archives=true);
+bool delete_package(const std::string& package_name);
 
-} // namespace package_manager
+}
 
 #endif // PACKAGE_MANAGER_H
