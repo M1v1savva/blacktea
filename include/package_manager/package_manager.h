@@ -11,7 +11,7 @@ namespace package_manager {
 bool fetch_package_list();
 
 /// Downloads the specified package by name.
-/// Get the download [URL] in the package list.
+/// Get the download url in the package list.
 /// @param package_name Name of the package.
 /// @return True on success, false on failure.
 bool download_package(const std::string& package_name);
