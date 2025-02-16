@@ -14,7 +14,7 @@ const std::string kPackageListUrl = kRepoUrl + "/releases/download/package_list_
 const std::string kSelfName = "blacktea_package_manager_v0.1";
 const std::string kSelfShortName = "blacktea_package_manager";
 
-const std::string kPackageDir = "packages";
+const std::string kPackageDir = "../../packages";
 const std::string kPackageListPath = kPackageDir + "/package_list.json";
 const std::string kEnvListPath = kPackageDir + "/env_list.json";
 
@@ -96,17 +96,17 @@ bool download_package(const std::string& package_name) {
         return false;
     }
 
-    if (!metadata.contains(package_name)) {
+    if (!metadata.contains("packages") || !metadata["packages"].contains(package_name)) {
         LOG(ERROR) << "Package name not found in package list: " << package_name;
         return false;
     }
 
-    if (!metadata[package_name].contains("url") || metadata[package_name]["url"].is_null()) {
+    if (!metadata["packages"][package_name].contains("url") || metadata["packages"][package_name]["url"].is_null()) {
         LOG(ERROR) << "No valid URL found for package: " << package_name;
         return false;
     }
 
-    std::string package_url = metadata[package_name]["url"];
+    std::string package_url = metadata["packages"][package_name]["url"];
     std::string package_path = kPackageDir + "/" + package_name + ".tar.gz";
 
 	CURL* curl = curl_easy_init();

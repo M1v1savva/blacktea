@@ -12,7 +12,7 @@ protected:
 
 TEST_F(PackageManagerTest, FetchPackageMetadata_Success) {
     EXPECT_TRUE(package_manager::fetch_package_list());
-    EXPECT_TRUE(std::filesystem::exists("packages/package_list.json"));
+    EXPECT_TRUE(std::filesystem::exists("../../packages/package_list.json"));
 }
 
 TEST_F(PackageManagerTest, DownloadPackage_Success) {
