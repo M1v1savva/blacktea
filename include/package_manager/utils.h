@@ -14,8 +14,8 @@ struct Config {
                 package_list_path,
                 env_list_path;
 
-    Config();
-} config;
+    Config(const std::string& config_file);
+} config("../config.json");
 
 size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* output) {
 	size_t total_size = size * nmemb;

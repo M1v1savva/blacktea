@@ -2,17 +2,18 @@
 
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <glog/logging.h>
 
 namespace utils {
 
-void Config::Config(const std::string& config_file) {
+Config::Config(const std::string& config_file) {
     std::ifstream file(config_file);
     if (!file.is_open()) {
         LOG(ERROR) << "Failed to open config file: " << config_file;
         throw std::runtime_error("Failed to open config file: " + config_file);
     }
 
-    json j;
+    nlohmann::json j;
     file >> j;
 
     this-> repo_url = j["repo_url"];
