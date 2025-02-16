@@ -1,10 +1,11 @@
 #include "package_manager/utils.h"
 
+#include <fstream>
 #include <nlohmann/json.hpp>
 
 namespace utils {
 
-void Config::load_config(const std::string& config_file) {
+void Config::Config(const std::string& config_file) {
     std::ifstream file(config_file);
     if (!file.is_open()) {
         LOG(ERROR) << "Failed to open config file: " << config_file;

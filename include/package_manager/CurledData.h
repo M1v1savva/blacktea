@@ -8,7 +8,7 @@ class CurledData {
 public:	
 	std::string data;
 	CURLcode curl_response_code;
-	long https_response_code; 
+	long https_response_code;
 
 	CurledData(std::string& _data, CURLcode& _curl_response_code, long _https_response_code)
 		:

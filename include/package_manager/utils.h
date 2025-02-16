@@ -14,8 +14,8 @@ struct Config {
                 package_list_path,
                 env_list_path;
 
-    bool load_config();
-};
+    Config();
+} config;
 
 size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* output) {
 	size_t total_size = size * nmemb;
