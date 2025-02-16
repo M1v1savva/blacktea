@@ -24,12 +24,14 @@ size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* out
     return total_size;
 }
 
-// TODO: test package fetch, download
 // TODO: rewrite install, sha256 part
+// TODO: logs in a file
 // TODO: self-update, run, delete
 // TODO: write tests and CMakeLists
 // TODO: write scripts
 // TODO: go through hello_world package once more
+// TODO: each package has ./install.sh
+// TODO: each script is run from /build with bash <script_name>.sh
 
 bool fetch_package_list() {
     if (!std::filesystem::exists(kPackageDir)) {
@@ -125,6 +127,7 @@ bool download_package(const std::string& package_name) {
 	curl_easy_setopt(curl, CURLOPT_URL, package_url.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out_file);
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
     CURLcode res = curl_easy_perform(curl);
     curl_easy_cleanup(curl);
     out_file.close();
@@ -137,6 +140,56 @@ bool download_package(const std::string& package_name) {
     LOG(INFO) << "Download complete: " << package_path;
     return true;
 }
+
+bool install_package(const std::string& package_name) {
+    std::string package_path = kPackageDir + "/" + package_name + ".tar.gz";
+    std::string hash_url = kRepoUrl + "/releases/download/" + package_name + "/" + package_name + ".sha256";
+
+    CURL* curl = curl_easy_init();
+    if (!curl) {
+        LOG(ERROR) << "Failed to initialize curl for hash retrieval.";
+        return false;
+    }
+
+    std::string expected_hash;
+    curl_easy_setopt(curl, CURLOPT_URL, hash_url.c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &expected_hash);
+    CURLcode res = curl_easy_perform(curl);
+    curl_easy_cleanup(curl);
+
+    if (res != CURLE_OK) {
+        LOG(ERROR) << "Failed to fetch SHA256 hash: " << curl_easy_strerror(res);
+        return false;
+    }
+
+    expected_hash.erase(std::remove(expected_hash.begin(), expected_hash.end(), '\n'), expected_hash.end());
+
+    if (!verify_package_hash(package_path, expected_hash)) {
+        LOG(ERROR) << "Hash mismatch for package: " << package_name;
+        return false;
+    }
+
+    std::string extract_command = "tar -xzf " + package_path + " -C " + kPackageDir;
+    if (std::system(extract_command.c_str()) != 0) {
+        LOG(ERROR) << "Failed to extract package: " << package_name;
+        return false;
+    }
+
+    std::filesystem::remove(package_path);
+
+    std::string install_script = kPackageDir + "/" + package_name + "/scripts/install.sh";
+    if (std::filesystem::exists(install_script)) {
+        if (std::system(("bash " + install_script).c_str()) != 0) {
+            LOG(ERROR) << "Installation script failed for: " << package_name;
+            return false;
+        }
+    }
+
+    LOG(INFO) << "Package installed successfully: " << package_name;
+    return true;
+}
+
 /*
 std::string fetch_package_hash(const std::string& package_name) {
     std::ifstream metadata_file(kPackageListPath);
@@ -250,4 +303,4 @@ bool verify_package_hash(const std::string& package_path, const std::string& exp
     return (hash_stream.str() == expected_hash);
 }*/
 
-} // namespace package_manager
+} 
