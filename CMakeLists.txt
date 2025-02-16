@@ -75,7 +75,7 @@ target_include_directories(tests PRIVATE
     ${curl_SOURCE_DIR}/include
     ${nlohmann_json_SOURCE_DIR}/include
 )
-target_link_libraries(tests PRIVATE gtest_main core libcurl)
+target_link_libraries(tests PRIVATE gtest_main core libcurl glog::glog)
 add_test(NAME PackageManagerTest COMMAND tests)
 
 install(TARGETS package_manager DESTINATION bin)

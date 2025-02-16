@@ -5,6 +5,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <glog/logging.h>
 #include <gtest/gtest.h>
 
 class PackageManagerTest : public ::testing::Test {
@@ -14,9 +15,11 @@ protected:
     }
 };
 
-// TEST_F(PackageManagerTest, LoadConfig_Success) {
-//     EXPECT_TRUE(utils::config-> self_name == "blacktea_package_manager");
-// }
+TEST_F(PackageManagerTest, LoadConfig_Success) {
+    EXPECT_TRUE((utils::config-> self_name) == "blacktea_package_manager");
+    LOG(INFO) << utils::config-> self_name;
+    LOG(INFO) << utils::config-> package_list_url;
+}
 
 // TEST_F(PackageManagerTest, FetchPackageMetadata_Success) {
 //     EXPECT_TRUE(package_manager::fetch_package_list());
