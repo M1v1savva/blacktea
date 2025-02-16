@@ -45,7 +45,17 @@ endif()
 
 find_package(OpenSSL REQUIRED)
 
-add_library(core STATIC src/package_manager.cpp)
+add_library(core STATIC
+    src/package_manager/download.cpp
+    src/package_manager/utils.cpp
+    src/package_manager/fetch_package_list.cpp
+)
+
+if(NOT EXISTS ${PROJECT_SOURCE_DIR}/src/package_manager/download.cpp OR
+   NOT EXISTS ${PROJECT_SOURCE_DIR}/src/package_manager/utils.cpp OR
+   NOT EXISTS ${PROJECT_SOURCE_DIR}/src/package_manager/fetch_package_list.cpp)
+  message(FATAL_ERROR "One or more source files for 'core' library are missing.")
+endif()
 
 target_include_directories(core
   PRIVATE
