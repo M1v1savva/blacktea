@@ -18,10 +18,10 @@ const std::string kPackageDir = "packages";
 const std::string kPackageListPath = kPackageDir + "/package_list.json";
 const std::string kEnvListPath = kPackageDir + "/env_list.json";
 
-size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
-    std::ofstream* out = static_cast<std::ofstream*>(userp);
-    out->write(static_cast<char*>(contents), size * nmemb);
-    return size * nmemb;
+size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* output) {
+    size_t total_size = size * nmemb;
+    output->append((char*)contents, total_size);
+    return total_size;
 }
 
 // TODO: test package fetch, download
@@ -35,30 +35,47 @@ bool fetch_package_list() {
     if (!std::filesystem::exists(kPackageDir)) {
         std::filesystem::create_directories(kPackageDir);
     }
-    
+
     CURL* curl = curl_easy_init();
     if (!curl) {
         LOG(ERROR) << "Failed to initialize curl.";
         return false;
     }
 
-    std::ofstream out_file(kPackageListPath);
-    if (!out_file.is_open()) {
-        LOG(ERROR) << "Failed to create package list file.";
-        return false;
-    }
-
+    std::string response_data;
     curl_easy_setopt(curl, CURLOPT_URL, kPackageListUrl.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out_file);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_data);
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+
     CURLcode res = curl_easy_perform(curl);
+
+    long response_code;
+    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
     curl_easy_cleanup(curl);
-    out_file.close();
 
     if (res != CURLE_OK) {
         LOG(ERROR) << "Failed to fetch package list: " << curl_easy_strerror(res);
         return false;
     }
+
+    if (response_code != 200) {
+        LOG(ERROR) << "Server returned HTTP code: " << response_code;
+        return false;
+    }
+
+    if (response_data.empty()) {
+        LOG(ERROR) << "Package list response is empty.";
+        return false;
+    }
+
+    std::ofstream out_file(kPackageListPath);
+    if (!out_file) {
+        LOG(ERROR) << "Failed to write package list file.";
+        return false;
+    }
+    out_file << response_data;
+    out_file.close();
 
     LOG(INFO) << "Package list updated successfully.";
     return true;
