@@ -15,7 +15,9 @@ struct Config {
                 env_list_path;
 
     Config(const std::string& config_file);
-} config("../config.json");
+};
+
+extern Config* config;
 
 size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* output) {
 	size_t total_size = size * nmemb;

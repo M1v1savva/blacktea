@@ -5,9 +5,9 @@
 #include <glog/logging.h>
 
 inline bool Metadata::load() {
-	std::ifstream metadata_file(kPackageListPath);
+	std::ifstream metadata_file(utils::config-> package_list_path);
     if (!metadata_file) {
-        LOG(ERROR) << "Package list not found at " << kPackageListPath;
+        LOG(ERROR) << "Package list not found at " << utils::config-> package_list_path;
         return false;
     }
 	try {
@@ -31,7 +31,7 @@ bool Metadata::get_url(const std::string& package_name, std::string& url) {
     return true;
 }
 
-bool Metadata::get_sha_url(const std::string& package_name, std::string& url_sha) {
+bool Metadata::get_url_sha(const std::string& package_name, std::string& url_sha) {
 	if (!(this-> find_name(package_name)))
 		return false;
 

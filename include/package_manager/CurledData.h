@@ -16,9 +16,9 @@ public:
 		curl_response_code(_curl_response_code),
 		https_response_code(_https_response_code) 
 	{}
-	bool download(const std::string& url, const std::ofstream& out_file);
+	bool download(const std::string& url, std::ofstream& out_file);
 private:
-	void fetch(const std::string& url);
+	bool fetch(const std::string& url);
 	bool is_ok();
 };
 

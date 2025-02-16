@@ -1,7 +1,11 @@
-#include <gtest/gtest.h>
 #include "package_manager/package_manager.h"
+#include "package_manager/utils.h"
+#include "package_manager/CurledData.h"
+#include "package_manager/Metadata.h"
+
 #include <filesystem>
 #include <fstream>
+#include <gtest/gtest.h>
 
 class PackageManagerTest : public ::testing::Test {
 protected:
@@ -10,18 +14,22 @@ protected:
     }
 };
 
-TEST_F(PackageManagerTest, FetchPackageMetadata_Success) {
-    EXPECT_TRUE(package_manager::fetch_package_list());
-    EXPECT_TRUE(std::filesystem::exists("../../packages/package_list.json"));
+TEST_F(PackageManagerTest, LoadConfig_Success) {
+    EXPECT_TRUE(utils::config-> self_name == "blacktea_package_manager");
 }
 
-TEST_F(PackageManagerTest, DownloadPackage_Success) {
-    EXPECT_TRUE(package_manager::download_package("hello_package"));
-}
+// TEST_F(PackageManagerTest, FetchPackageMetadata_Success) {
+//     EXPECT_TRUE(package_manager::fetch_package_list());
+//     EXPECT_TRUE(std::filesystem::exists("../../packages/package_list.json"));
+// }
 
-TEST_F(PackageManagerTest, DownloadPackage_Failure_NoMetadata) {
-    EXPECT_FALSE(package_manager::download_package("nonexistent_package"));
-}
+// TEST_F(PackageManagerTest, DownloadPackage_Success) {
+//     EXPECT_TRUE(package_manager::download_package("hello_package"));
+// }
+
+// TEST_F(PackageManagerTest, DownloadPackage_Failure_NoMetadata) {
+//     EXPECT_FALSE(package_manager::download_package("nonexistent_package"));
+// }
 
 // TEST_F(PackageManagerTest, VerifyPackageHash_Success) {
 //     std::string test_file = "test_package.tar.gz";

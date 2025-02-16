@@ -6,6 +6,8 @@
 
 namespace utils {
 
+Config* config = new Config("../config.json");
+
 Config::Config(const std::string& config_file) {
     std::ifstream file(config_file);
     if (!file.is_open()) {
