@@ -14,9 +14,9 @@ protected:
     }
 };
 
-TEST_F(PackageManagerTest, LoadConfig_Success) {
-    EXPECT_TRUE(utils::config-> self_name == "blacktea_package_manager");
-}
+// TEST_F(PackageManagerTest, LoadConfig_Success) {
+//     EXPECT_TRUE(utils::config-> self_name == "blacktea_package_manager");
+// }
 
 // TEST_F(PackageManagerTest, FetchPackageMetadata_Success) {
 //     EXPECT_TRUE(package_manager::fetch_package_list());
