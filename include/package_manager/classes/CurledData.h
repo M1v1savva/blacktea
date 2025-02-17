@@ -10,6 +10,7 @@ public:
 	CURLcode curl_response_code;
 	long https_response_code;
 
+	CurledData() {}
 	CurledData(std::string& _data, CURLcode& _curl_response_code, long _https_response_code)
 		:
 		data(_data),

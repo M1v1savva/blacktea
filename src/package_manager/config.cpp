@@ -4,7 +4,7 @@
 #include <nlohmann/json.hpp>
 #include <glog/logging.h>
 
-bool config::load(const std::string& config_file) {
+inline bool config::load(const std::string& config_file) {
 	std::ifstream file(config_file);
     if (!file.is_open()) {
         LOG(ERROR) << "Failed to open config file: " << config_file;
