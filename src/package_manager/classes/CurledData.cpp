@@ -1,4 +1,4 @@
-#include "package_manager/CurledData.h"
+#include "package_manager/classes/CurledData.h"
 #include "package_manager/utils.h"
 
 #include <fstream>

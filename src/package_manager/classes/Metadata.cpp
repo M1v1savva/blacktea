@@ -1,4 +1,4 @@
-#include "package_manager/Metadata.h"
+#include "package_manager/classes/Metadata.h"
 #include "package_manager/utils.h"
 
 #include <fstream>

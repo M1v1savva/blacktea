@@ -42,10 +42,10 @@ add_library(core STATIC
     src/package_manager/download.cpp
     src/package_manager/utils.cpp
     src/package_manager/config.cpp
-    src/package_manager/install_package.cpp
-    src/package_manager/fetch_package_list.cpp
-    src/package_manager/CurledData.cpp
-    src/package_manager/Metadata.cpp
+    src/package_manager/install.cpp
+    src/package_manager/fetch.cpp
+    src/package_manager/classes/CurledData.cpp
+    src/package_manager/classes/Metadata.cpp
 )
 target_include_directories(core PRIVATE
     ${PROJECT_SOURCE_DIR}/include
