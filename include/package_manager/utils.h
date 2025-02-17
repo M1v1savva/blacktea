@@ -25,6 +25,8 @@ inline size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::stri
     return total_size;
 }
 
+bool utils::download_package(const std::string& package_name);
+
 }
 
 #endif // UTILS_H
