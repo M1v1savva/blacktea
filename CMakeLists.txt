@@ -39,11 +39,12 @@ if(NOT curl_POPULATED)
 endif()
 
 add_library(core STATIC
-    src/package_manager/download.cpp
+    src/package_manager/package_manager.cpp
+    # src/package_manager/download.cpp
     src/package_manager/utils.cpp
     src/package_manager/config.cpp
-    src/package_manager/install.cpp
-    src/package_manager/fetch.cpp
+    # src/package_manager/install.cpp
+    # src/package_manager/fetch.cpp
     src/package_manager/classes/CurledData.cpp
     src/package_manager/classes/Metadata.cpp
 )

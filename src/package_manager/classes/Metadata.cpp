@@ -5,9 +5,9 @@
 #include <glog/logging.h>
 
 inline bool Metadata::load() {
-	std::ifstream metadata_file(utils::config-> package_list_path);
+	std::ifstream metadata_file(config::package_list_path);
     if (!metadata_file) {
-        LOG(ERROR) << "Package list not found at " << utils::config-> package_list_path;
+        LOG(ERROR) << "Package list not found at " << config::package_list_path;
         return false;
     }
 	try {

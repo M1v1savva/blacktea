@@ -26,4 +26,20 @@ bool fetch_package_list() {
     return true;
 }
 
+bool install_package(const std::string& package_name) {
+	return false;
+}
+
+bool self_update() {
+	return false;
+}
+
+bool run_package(const std::string& package_name) {
+	return false;
+}
+
+bool delete_package(const std::string& package_name) {
+	return false;
+}
+
 }

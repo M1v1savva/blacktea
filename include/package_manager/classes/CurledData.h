@@ -4,8 +4,7 @@
 #include <string>
 #include <curl/curl.h>
 
-class CurledData {
-public:	
+struct CurledData {
 	std::string data;
 	CURLcode curl_response_code;
 	long https_response_code;
@@ -18,7 +17,6 @@ public:
 		https_response_code(_https_response_code) 
 	{}
 	bool download(const std::string& url, std::ofstream& out_file);
-private:
 	bool fetch(const std::string& url);
 	bool is_ok();
 };
