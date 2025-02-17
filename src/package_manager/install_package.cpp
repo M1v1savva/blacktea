@@ -1,13 +1,10 @@
-#include "package_manager/utils.h"
+#include "package_manager/package_manager.h"
 
-#include <fstream>
-#include <glog/logging.h>
-
-bool utils::download_package(const std::string& package_name) {
+bool package_manager::install_package(const std::string& package_name) {
 	std::string package_url = "";
     get_package_url(package_name, package_url);
     
-    std::string package_path = util::config-> package_dir + "/" + package_name + ".tar.gz";
+    std::string package_path = util::config-> package_dir + "/" + util::config-> package_full_name + ".tar.gz";
 
     std::ofstream out_file(package_path, std::ios::binary);
     if (!out_file.is_open()) {
@@ -20,6 +17,7 @@ bool utils::download_package(const std::string& package_name) {
         return false;
     }
 
-    LOG(INFO) << "Download complete: " << package_path;
-    return true;
+	
+
+	return true;
 }

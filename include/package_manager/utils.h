@@ -5,27 +5,14 @@
 
 namespace utils {
 
-struct Config {
-    std::string repo_url,
-                package_list_url,
-                self_name,
-                self_full_name,
-                package_dir,
-                package_list_path,
-                env_list_path;
-
-    Config(const std::string& config_file);
-};
-
-extern Config* config;
-
 inline size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* output) {
 	size_t total_size = size * nmemb;
     output->append((char*)contents, total_size);
     return total_size;
 }
 
-bool utils::download_package(const std::string& package_name);
+bool download_package(const std::string& package_name);
+bool compare_sha256(const std::string& url_sha, const std::string& archive_path);
 
 }
 
