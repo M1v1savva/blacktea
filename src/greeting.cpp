@@ -6,4 +6,4 @@ std::string get_greeting() {
     return "Hello, world!";
 }
 
-}  // namespace hello_package
+}

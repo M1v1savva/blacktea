@@ -21,6 +21,11 @@ sudo apt install cmake
 ## Build
 
 ```bash
-mkdir build && cd build
-cmake ..
-make
+bash scripts/install.sh
+```
+
+## Run
+
+```bash
+bash scripts/run.sh
+```

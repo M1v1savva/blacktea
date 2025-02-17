@@ -7,6 +7,6 @@ namespace hello_package {
 
 std::string get_greeting();
 
-}  // namespace hello_package
+}
 
 #endif // GREETING_H

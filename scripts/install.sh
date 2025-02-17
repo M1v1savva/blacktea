@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# Simple script to build the hello_package
+# Simple script to build hello_package
 # Run from the project root:
-# ./scripts/build.sh
+# bash scripts/build.sh
 
 mkdir -p build
 cd build || exit 1
